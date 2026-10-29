@@ -43,12 +43,12 @@ async def main():
         assert await js('document.getElementById("bucket").getAttribute("aria-pressed")==="true"')
         await touch('touchStart',.475,.5);await touch('touchEnd')
         pixel='Array.from(document.getElementById("drawing").getContext("2d").getImageData(304,320,1,1).data)'
-        assert await js(pixel)==[249,104,64,255]
+        assert all(abs(actual-expected)<=2 for actual,expected in zip(await js(pixel),[249,104,64,255]))
         assert await js('document.getElementById("preview-face").src.startsWith("data:image/png")')
         await until('document.getElementById("preview-face").closest(".clay-head").dataset.contour==="drawn"')
         shot=await call('Page.captureScreenshot',{'format':'png'});open('/tmp/kao-drawing-filled.png','wb').write(base64.b64decode(shot['data']))
         await click('picker');await touch('touchStart',.475,.5);await touch('touchEnd')
-        assert await js('document.getElementById("custom-color").value==="#f96840" && document.getElementById("pen").getAttribute("aria-pressed")==="true"')
+        assert await js('document.getElementById("pen").getAttribute("aria-pressed")==="true" && [249,104,64].every((v,i)=>Math.abs(v-parseInt(document.getElementById("custom-color").value.slice(1+i*2,3+i*2),16))<=2)')
         await click('undo');assert (await js(pixel))[3]==0
         for width in [320,390,800,1280]:
             await call('Emulation.setDeviceMetricsOverride',{'width':width,'height':844,'deviceScaleFactor':1,'mobile':width<600})

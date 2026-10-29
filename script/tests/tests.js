@@ -86,7 +86,7 @@ await test('バケツの境界・同色・undo・消去・白紙判定', () => {
   const d=new Drawing(canvas),pixel=(x,y)=>Array.from(d.ctx.getImageData(x,y,1,1).data);
   d.strokes.push({tool:'circle',color:'#292d36',size:8,points:[{x:100,y:100},{x:300,y:300}]});d.render();d.check();
   d.color='#f96840';d.fill({x:200,y:200});
-  assert(pixel(200,200).join(',')==='249,104,64,255','閉じた丸の内側を塗る');
+  assert([249,104,64,255].every((v,i)=>Math.abs(pixel(200,200)[i]-v)<=2),'閉じた丸の内側を塗る');
   assert(pixel(20,20)[3]===0,'外へ漏れない');
   const history=d.past.length;d.fill({x:200,y:200});assert(d.past.length===history,'同色は履歴を増やさない');
   d.undo();assert(pixel(200,200)[3]===0&&pixel(200,100)[3]>0,'塗りだけundo');

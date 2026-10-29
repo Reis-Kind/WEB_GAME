@@ -118,3 +118,97 @@ body{min-height:100svh}.site-header{height:64px;padding:0 22px}.settings-trigger
   .in-battle #battle-screen{min-height:calc(100svh - var(--phone-bottom-space) - 20px)}
   .in-battle textarea{scroll-margin-bottom:calc(24px + var(--phone-bottom-space))}
 }
+
+/* Phone app shell: the canvas uses the space left after the controls. */
+@media(max-width:600px){
+  html{height:100%;overflow:hidden;overscroll-behavior:none}
+  body{height:100svh;height:100dvh;min-height:0;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) max(10px,env(safe-area-inset-bottom,0px)) env(safe-area-inset-left,0px);display:flex;flex-direction:column;overflow:hidden}
+  .site-header{height:50px;min-height:50px;flex-shrink:0;width:100%;padding-left:12px}
+  main,.in-battle main{width:100%;flex:1;min-height:0;max-height:100%;padding:0 12px;display:flex;overflow:hidden}
+  .flow-screen,.draw-layout,.in-battle #battle-screen{height:100%;min-height:0;max-height:100%;width:100%;margin:0 auto;padding:10px 4px;min-width:0;display:flex;flex-direction:column;gap:8px}
+  .flow-screen>*{flex-shrink:0}
+  .flow-screen .text-back{margin:0;padding:8px 0;min-height:32px;text-align:left}
+  .flow-screen .primary{min-height:46px;padding:10px 16px}
+  .title-screen{justify-content:center;gap:6px}
+  .title-screen h1{font-size:clamp(27px,4.5dvh,38px);margin:0;line-height:1.25}
+  .title-screen .title-stage{flex:0 1 230px;min-height:70px;height:auto;--head-size:clamp(75px,23dvh,180px)}
+  .title-screen>p{margin:0 0 6px;font-size:11px}
+  .title-screen .ranking-link{min-height:54px;margin:7px auto 0!important;padding:8px 14px}
+  .title-screen #sound-test{margin:0;padding:7px 12px;min-height:30px}
+  .rules-screen>h2,.difficulty-screen>h2{font-size:21px;margin:0 0 8px}
+  .simple-rules,.difficulty-choices{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;margin:0}
+  .simple-rules li{padding:12px;margin:0;gap:10px}
+  .simple-rules li p{margin:3px 0 0}
+  .difficulty-choices>button{padding:12px}
+  .provider-notice{margin:0;font-size:9px;line-height:1.5}
+  .draw-layout{gap:7px;padding:6px 0}
+  .draw-layout>.panel{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:4px}
+  .draw-layout>.panel>.panel-heading{padding:8px 12px;flex-shrink:0}
+  .draw-layout h2{font-size:16px}
+  .draw-layout .drawing-workspace{flex:1;min-height:0;grid-template-columns:minmax(0,1fr) 66px;gap:7px;padding:0 8px;align-items:center;container-type:size}
+  .draw-layout .canvas-wrap{width:min(100%,100cqh);aspect-ratio:1;max-height:100%;margin:auto;flex-shrink:0}
+  .draw-layout .preview-card{position:static;padding:6px 2px}
+  .draw-layout .preview-card .preview-stage{--head-size:52px;height:75px}
+  .draw-layout .toolbar{padding:6px 8px 2px;gap:4px;flex-shrink:0}
+  .toolbar .tools{gap:3px;justify-content:space-between}
+  .toolbar .tool{min-width:36px;min-height:36px;padding:3px 4px}
+  .toolbar .colors{flex-basis:calc(100% - 35px);padding-top:4px;justify-content:flex-start;gap:9px}
+  .toolbar .size-control{margin-left:auto;min-height:26px}
+  .draw-layout .canvas-actions{padding:2px 8px;gap:4px;flex-shrink:0}
+  #drawing-tool-help{font-size:8px;max-width:145px;min-height:0}
+  .canvas-actions button{min-height:30px;padding:5px}
+  .draw-controls{flex-shrink:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:4px 10px;align-items:start}
+  .draw-options{padding:0;margin:0}
+  .draw-options label{font-size:9px;margin:0 0 3px!important}
+  .draw-options select{min-height:37px;padding:7px 4px;font-size:12px}
+  .draw-next{padding:0;display:contents}
+  .draw-next .primary{min-height:49px;padding:8px 10px;font-size:12px}
+  .draw-next #start-help{grid-column:2;font-size:8px;margin:0;min-height:0;line-height:1.4}
+  .draw-next .text-back{grid-column:1;grid-row:2;margin:0;padding:2px 0;min-height:22px;text-align:left}
+  .in-battle #battle-screen{justify-content:center;gap:16px;padding:50px 0 10px}
+  .in-battle .face-stage{height:clamp(90px,31dvh,230px);--head-size:clamp(75px,25dvh,155px)}
+  .in-battle .battle-bottom{flex-shrink:0}
+  .in-battle .attack-panel textarea{height:60px;min-height:60px}
+  .in-battle .fighter progress{margin-top:12px}
+  .result-screen{justify-content:flex-start;gap:4px}
+  .result-screen #result{padding:0;min-height:0;display:flex;flex-direction:column;gap:6px}
+  .result-screen #result-symbol{display:none}
+  .result-screen #result-title{font-size:24px;margin:0}
+  .result-screen #result-detail{font-size:11px;margin:0}
+  #total-damage{font-size:18px!important;margin:0}
+  #result-review{margin:0;flex-shrink:0}
+  #result-review>summary{padding:10px;font-size:12px}
+  #result-review>summary small{display:none}
+  #ranking-form{padding:0}
+  #ranking-form label{font-size:9px}
+  #ranking-form .ranking-field{padding:8px;margin:3px 0 5px;min-height:36px}
+  #result .secondary{min-height:34px;padding:7px 10px;margin:0;font-size:11px}
+  #ranking-feedback{font-size:10px;margin:0;line-height:1.4}
+  #result-ranking.ranking-link{margin:0!important;padding:6px 12px;min-height:46px}
+  #result-ranking.ranking-link small{display:none}
+  #result-ranking.ranking-link>span:nth-child(2){font-size:13px}
+  #result .primary{min-height:43px;padding:8px 12px}
+  .result-screen #back-title{margin:0;min-height:30px;padding:4px 0}
+  /* Long records scroll inside their own reader, never under the drawing canvas. */
+  #ranking-list,#ranking-log-turns{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;margin:0;touch-action:pan-y}
+  #ranking-screen>h2,#ranking-log-title{font-size:21px;margin:0}
+  #ranking-screen .ranking-field{margin:0;padding:8px;min-height:36px}
+  #ranking-status,#ranking-log-meta,#ranking-log-status{margin:0;font-size:10px}
+  .ranking-log-faces{margin:0;gap:15px}
+  .ranking-log-faces .ranking-portrait,.ranking-enemy{width:65px;height:65px}
+  #result-review[open]{position:fixed;inset:max(55px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));z-index:110;display:flex;flex-direction:column;box-shadow:0 0 0 100vmax #30354480}
+  #result-review[open]>summary{flex-shrink:0;padding:16px}
+  #result-review[open]>summary:after{content:"閉じる ×";float:right;font-size:12px}
+  #result-log{min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y}
+}
+@media(max-width:600px) and (max-height:650px){
+  .site-header{height:44px;min-height:44px}
+  .flow-screen{gap:4px;padding-top:6px;padding-bottom:4px}
+  .simple-rules li{padding:8px}.simple-rules{gap:6px}
+  .difficulty-choices{gap:6px}.difficulty-choices>button{padding:8px}
+  .difficulty-choices small{margin-top:2px}
+  .title-screen .eyebrow{display:none}
+  .result-screen .eyebrow{display:none}
+  .result-screen #result{gap:4px}
+  .result-screen #result-title{font-size:20px}
+}
