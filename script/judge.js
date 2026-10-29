@@ -19,15 +19,14 @@ export function demoScore(text, history = []) {
   const comparison = /みたい|まるで|ような|ように|そっくり|たとえ|かよ|並み|すぎ|まんま/.test(text);
   const feature = /目|眼|眉|まゆ|鼻|口|くち|耳|髪|かみ|輪郭|ほっぺ|顔|かお|あご|おでこ/.test(text);
   const playful = /海苔|のり|会議|渋滞|信号|滑走路|アンテナ|おにぎり|パン|電車|月|山|毛虫|カーテン|バナナ|定規|Wi-Fi|wifi|プリン|宇宙|寝ぐせ|看板/.test(text);
-  const harsh = /死ね|殺す|きもい|キモい|ブス|バカ|馬鹿/.test(text);
-  const damage = harsh ? 0 : Math.min(30, 6 + (comparison ? 9 : 0) + (feature ? 5 : 0) + (playful ? 7 : 0));
-  const reason = harsh ? '強い悪口では加点しません。笑えるたとえで、もう一勝負。' : `${comparison ? 'たとえの言い回し' : '新しい一言'}${feature ? '・顔の部位を表す言葉' : ''}${playful ? '・遊びのある単語' : ''}を仮採点。画像との一致や本当の面白さは判定していません。`;
+  const damage = Math.min(30, 6 + (comparison ? 5 : 0) + (feature ? 12 : 0) + (playful ? 7 : 0));
+  const reason = `${comparison ? 'たとえの言い回し' : '新しい一言'}${feature ? '・顔の部位を表す言葉' : ''}${playful ? '・遊びのある単語' : ''}を仮採点。画像との一致や本当の面白さは判定していません。`;
   return {damage, reason, mode: 'demo'};
 }
 export const CPU_LINES = [
-  'その顔、まるで月曜日の会議に出席するおにぎりみたい！',
-  'その目、宇宙からの電波を待つアンテナみたい！',
-  'その口、プリンの登場を待つ小さな改札みたい！'
+  'その顔、月曜の会議で三時間説教されたおにぎりかよ！具までやる気なくしてんぞ！',
+  'その目、圏外のアンテナみたいだな！宇宙にまで既読スルーされてんのかよ！',
+  'その口、プリン専用の改札かよ！悪口だけ特急で通過させんな！'
 ];
 export class DemoJudge {
   async evaluate({text, history}) { return demoScore(text, history); }

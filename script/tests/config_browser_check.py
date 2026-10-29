@@ -23,7 +23,7 @@ async def main():
             return result['result'].get('value')
         async def ready():
             for _ in range(100):
-                if await js('Boolean(document.getElementById("judge-mode")) && !document.getElementById("judge-mode").disabled'): return
+                if await js('document.body?.dataset.judgeLoaded==="true"'): return
                 await asyncio.sleep(.1)
             raise AssertionError('startup timed out')
         await call('Page.enable')
@@ -50,30 +50,31 @@ async def main():
             await call('Page.navigate', {'url':'http://127.0.0.1:8001/'})
             await asyncio.sleep(.3)
             await ready()
-            state = await js('({mode:document.getElementById("judge-mode").value,status:document.getElementById("connection-status").textContent,model:document.getElementById("model-select").value,calls:window.modelCalls})')
-            expected_mode = mode if valid else 'demo'
-            assert state['mode'] == expected_mode, (name, state)
-            if mode == 'local' and valid:
-                assert state['calls'] == [{'model':'configured-vision-test'}], state
-                assert state['model'] == 'configured-vision-test', state
-                if ok: assert '画像対応' in state['status'] and '接続済み' in state['status'], state
-                else: assert 'model missing' in state['status'] and 'config.py' in state['status'], state
+            state = await js('({ready:document.body.dataset.judgeReady,status:document.getElementById("connection-status").textContent,notice:document.getElementById("provider-notice").textContent,calls:window.modelCalls})')
+            assert state['ready'] == str(valid and (mode=='demo' or ok)).lower(), (name,state)
+            assert await js('!document.querySelector("#judge-mode,#open-settings")')
+            if mode=='local' and valid:
+                assert state['calls']==[{'model':'configured-vision-test'}],state
             else:
-                assert not state['calls'], state
-                assert 'デモ判定' in state['status'], state
+                assert not state['calls'],state
+            if not valid or not ok:
+                assert '準備ができません' in state['status'],state
+            elif mode=='demo':
+                assert 'デモ判定' in state['notice'],state
             # Draw through real browser input to test start-gating after startup.
+            await js('document.getElementById("show-rules").click();document.getElementById("begin-drawing").click();document.getElementById("confirm-difficulty").click()')
             rect = await js('(()=>{const r=document.getElementById("drawing").getBoundingClientRect();return {x:r.x+50,y:r.y+50}})()')
             for kind in ['mousePressed', 'mouseReleased']:
                 await call('Input.dispatchMouseEvent', {'type':kind, 'x':rect['x'], 'y':rect['y'], 'button':'left', 'clickCount':1})
             disabled = await js('document.getElementById("start").disabled')
-            assert disabled == (mode == 'local' and valid and not ok), (name, disabled)
+            assert disabled == (not valid or (mode=='local' and not ok)), (name, disabled)
             print('PASS:', name, state['status'], flush=True)
         await call('Page.removeScriptToEvaluateOnNewDocument', {'identifier':script_id})
         # Check that the running server also publishes the real program configuration.
         await call('Page.navigate', {'url':'http://127.0.0.1:8001/api/config'})
         await asyncio.sleep(.3)
         data = await js('JSON.parse(document.body.innerText)')
-        assert data == {'mode':'local', 'model':'qwen3-vl:4b-instruct'}, data
+        assert data == {'mode':'gemini', 'model':'qwen3-vl:4b-instruct', 'openai_model':'gpt-5.4-mini', 'gemini_model':'gemini-3.1-flash-lite'}, data
         print('PASS: server config endpoint', data)
 
 if __name__ == '__main__': asyncio.run(main())
